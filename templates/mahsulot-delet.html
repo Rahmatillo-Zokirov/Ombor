@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ma'lumotni O'chirish</title>
+</head>
+<body>
+    <h1>Ma'lumotni O'chirish</h1>
+    <p>Ma'lumotni o'chirishga ishonchingiz komilmi?</p>
+    <form action="{% url 'mahsulot_ochirish' mahsulot.id %}" method="post">
+    {% csrf_token %}
+    <p>Ma'lumotni o'chirishga ishonchingiz komilmi?</p>
+    <!-- "Ha" tugmasi -->
+    <button type="submit">Ha</button>
+</form>
+<!-- "Yo'q" tugmasi -->
+<a href="{% url 'mahsulot_tahrirlash' mahsulot.id %}">Yo'q</a>
+
+</body>
+</html>

@@ -8,6 +8,11 @@ class Tarqatuvchi(AbstractUser):
     logo = models.ImageField(blank=True, null=True)
 
 
+    class Meta:
+        verbose_name = 'Tarqatuvchi'
+        verbose_name_plural = 'Tarqatuvchilar'
+
+
     def __str__(self):
         return f"{self.bolim}: {self.first_name} {self.last_name}"
 

@@ -1,4 +1,4 @@
-    {% extends 'base.html' %}
+{% extends 'base.html' %}
 
 {% block mahsulot_active %} active {% endblock %}
 
@@ -29,9 +29,11 @@
                     <button type="submit" class="btn btn-primary" data-toggle="modal" data-target="#myModal">
                         Mahsulot qo'shish
                     </button>
-                    <form method="get" action="{% url 'mahsulotlar' %}">
+                    <form method="get" action="{% url 'mahsulot_qidirish' %}">
                         <div class="input-group mb-3">
-                            <input type="text" name="q" class="form-control" placeholder="Nom, brand .... ">
+                            <label>
+                                <input type="text" name="q" class="form-control" placeholder="Nom, brand .... ">
+                            </label>
                             <div class="input-group-append">
                                 <button class="btn btn-outline-secondary" type="submit">Qidirish</button>
                             </div>
@@ -91,36 +93,40 @@
                 </div>
 
                 <!-- Modal body -->
-                <form method="post" id="new-product-form">
+                <form id="new-product-form" method="post">
                     {% csrf_token %}
                     <div class="modal-body">
-                        <label for="new-product-name">Nomi:</label>
-                        <input type="text" name="nom" placeholder="Mahsulot nomi..." id="new-product-name"
-                               class="form-control" required>
+                        <label>Mahsulot:</label>
+                        <select name="mahsulot" class="form-control" required>
+                            {% for mahsulot in mahsulotlar %}
+                            <option value="{{ mahsulot.id }}">{{ mahsulot.nom }}</option>
+                            {% endfor %}
+                        </select>
                         <br>
-                        <label for="new-product-name">Brend:</label>
-                        <input type="text" name="brand" placeholder="Mahsulot brendi..." id="new-product-brend"
+                        <label>Mijoz:</label>
+                        <select name="mijoz" class="form-control" required>
+                            {% for mijoz in mijozlar %}
+                            <option value="{{ mijoz.id }}">{{ mijoz.ism }}</option>
+                            {% endfor %}
+                        </select>
+                        <br>
+                        <label for="sana">Sana:</label>
+                        <input type="date" name="sana" placeholder="Sana ..." id="sana" class="form-control"
+                               required>
+                        <br>
+                        <label for="miqdor">Miqdor:</label>
+                        <input type="number" name="miqdor" placeholder="Miqdor ..." id="miqdor" class="form-control"
+                               required>
+                        <br>
+                        <label for="umumiy_summa">Jami:</label>
+                        <input type="number" name="jami" placeholder="Jami summa" id="umumiy_summa"
                                class="form-control">
                         <br>
-                        <label for="new-product-name">Keldi:</label>
-                        <input type="number" name="narx1" placeholder="Kelgan narxi..." id="new-product-price"
-                               class="form-control" required>
+                        <label for="nasiya">Qarz:</label>
+                        <input type="number" name="qarz" placeholder="Qarz ..." id="nasiya" class="form-control">
                         <br>
-                        <label for="new-product-name">Sotish:</label>
-                        <input type="number" name="narx2" placeholder="Sotish narxi..." id="new-product-price-2"
-                               class="form-control">
-                        <br>
-                        <label for="new-product-name">Miqdori:</label>
-                        <input type="number" name="miqdor" placeholder="Mahsulot miqdori..."
-                               id="new-product-amount" class="form-control" required>
-                        <br>
-                        <label for="new-product-name">O'lchov:</label>
-                        <input type="text" name="olchov" placeholder="Mahsulot o'lchovi..."
-                               class="form-control" required>
-                        <br>
-                        <label for="new-product-name">Kelgan sana:</label>
-                        <input type="date" name="sana" placeholder="Kelgan sanasi..."
-                               class="form-control">
+                        <label for="tolandi">To'landi:</label>
+                        <input type="number" name="tolandi" placeholder="To'landi ..." id="tolandi" class="form-control">
                         <br>
                     </div>
 
@@ -130,6 +136,7 @@
                         <button type="button" class="btn btn-danger" data-dismiss="modal">Yopish</button>
                     </div>
                 </form>
+
 
             </div>
         </div>

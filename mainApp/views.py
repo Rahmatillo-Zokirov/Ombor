@@ -1,10 +1,12 @@
+from datetime import datetime
+
 from django.db.models import Q
 from django.shortcuts import render, redirect, get_object_or_404
 from django.views import View
 from django.views.generic import DetailView
 
 from .models import *
-
+from statsApp.models import *
 
 class LoginView(View):
     def get(self, request):
@@ -96,20 +98,53 @@ class MahsulotDeleteView(View):
         return redirect('login')
 
 
-
-
-class QidirishView(View):
+class MahsulotQidirishView(View):
     def get(self, request):
+        nom_query = request.GET.get('q_nom')
+        brand_query = request.GET.get('q_brand')
+
+        mahsulotlar = Mahsulot.objects.filter(nom__icontains=nom_query, brand__icontains=brand_query)
+
+        context = {
+            'mahsulotlar': mahsulotlar,
+        }
+        return render(request, 'mahsulotlar.html', context)
+
+class MijozlarDelete(View):
+    def get(self, request, pk):
         if request.user.is_authenticated:
-            query = request.GET.get('q')  # Qidirish so'rovi
-            if query:
-                mahsulotlar = Mahsulot.objects.filter(
-                    Q(nom__icontains=query) | Q(brand__icontains=query)  # Mahsulot nomi yoki brendi bo'yicha qidirish
-                )
-            else:
-                mahsulotlar = Mahsulot.objects.filter(tarqatuvchi=request.user)
-            content = {
-                'mahsulotlar': mahsulotlar
-            }
-            return render(request, 'mahsulotlar.html', content)
+            mijoz = Mijoz.objects.get(pk=pk)
+            if mijoz.tarqatuvchi == request.user:
+                mijoz.delete()
+            return redirect('mahsumijozlarlotlar')
+        return redirect('login')
+
+
+class MijozTahrirlashView(View):
+    def get(self, request, pk):
+        mijoz = get_object_or_404(Mijoz, pk=pk)
+        context = {'product': mijoz}
+        return render(request, 'mijoz-tahrirlash.html', context)
+
+    def post(self, request, pk):
+        if request.user.is_authenticated:
+            mijoz = get_object_or_404(Mijoz, pk=pk)
+            mijoz.ism = request.POST.get('ism')
+            mijoz.dokon = request.POST.get('dokon')
+            mijoz.tel = request.POST.get('tel')
+            mijoz.manzil = request.POST.get('manzil')
+            mijoz.qarz = request.POST.get('qarz')
+            mijoz.save()
+            return redirect('mijozlar',)
+        return redirect('login')
+
+
+
+class MijozDeletView(View):
+    def get(self, request, pk):
+        if request.user.is_authenticated:
+            mijoz = Mijoz.objects.get(pk=pk)
+            if mijoz.tarqatuvchi == request.user:
+                mijoz.delete()
+            return redirect('mijozlar')
         return redirect('login')

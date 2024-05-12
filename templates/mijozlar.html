@@ -49,7 +49,14 @@
                             <td>{{ mijoz.tel }}</td>
                             <td>{{ mijoz.manzil }}</td>
                             <td>{{ mijoz.qarz }}</td>
-                            <td><a href="#"><button type="submit" class="btn btn-danger" data-toggle="modal">Tahrirlash</button></a></td>
+                            <td>
+                                <a href="/main/mijozlar/{{ mijoz.id }}/tahrirlash">
+                                <button type="submit" class="btn btn-danger" data-toggle="modal">Tahrirlash</button>
+                                </a>
+                                <a href="/main/mijozlar/{{ mijoz.id }}/ochirish">
+                                <button type="submit" class="btn btn-danger" data-toggle="modal">O'chirish</button>
+                                </a>
+                            </td>
                         </tr>
                         {% endfor %}
                     </tbody>

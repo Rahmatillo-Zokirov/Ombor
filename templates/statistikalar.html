@@ -52,12 +52,15 @@
                             <th scope="row">{{ forloop.counter }}</th>
                             <td>{{ sotuv.mahsulot.nom }}, {{ sotuv.mahsulot.brand }}</td>
                             <td>{{ sotuv.mijoz.ism }}, {{ sotuv.mijoz.dokon }}</td>
-                            <td>2022.06.13</td>
-                            <td>30</td>
-                            <td>1260000 so'm</td>
-                            <td>560000 so'm</td>
-                            <td>700000 so'm</td>
-                            <td><a href="#"><button type="submit" class="btn btn-danger" data-toggle="modal">Tahrirlash</button></a></td>
+                            <td>{{ sotuv.sana }}</td>
+                            <td>{{ sotuv.miqdor }} {{ sotuv.mahsulot.olchov }}</td>
+                            <td>{{ sotuv.summa }} so'm</td>
+                            <td>{{ sotuv.tolandi }} so'm</td>
+                            <td>{{ sotuv.qarz }} so'm</td>
+                            <td>
+                                <a href="/main/statistikalar/{{ sotuv.id }}/tahrirlash"><button type="button" class="btn btn-warning" data-toggle="modal">Tahrirlash</button></a>
+                                <a href="/main/statistikalar/{{ sotuv.id }}/delet"><button type="button"class="btn btn-danger" data-toggle="modal">O'chirish</button> </a>
+                            </td>
                         </tr>
                     {% endfor %}
                     </tbody>
@@ -65,6 +68,27 @@
             </div>
         </div>
     </div>
+  {% for sotuv in sotuvlar %}
+            <div class="modal" id="myModaldelete{{ sotuv.id }}">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header bg-dark">
+                            <h4 class="modal-title">Mahsulotni o'chirish</h4>
+                            <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        </div>
+                        <div class="modal-body">
+                            <h5 class="container">Haqiqatdan ham mahsulotni o'chirmoqchimisiz?</h5>
+                        </div>
+                        <div class="modal-footer">
+                            <a href="/main/statistikalar/{{ sotuv.id }}/delete/">
+                                <button type="button" class="btn btn-success">Ha</button>
+                            </a>
+                            <button type="button" class="btn btn-danger" data-dismiss="modal">Yo'q</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
     
     <!-- The Modal -->
     <div class="modal" id="myModal">

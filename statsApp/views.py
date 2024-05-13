@@ -1,10 +1,10 @@
 from datetime import datetime
 
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.views import View
 
 from mainApp.models import Mahsulot, Mijoz
-from statsApp.models import Sotuv
+from statsApp.models import *
 
 
 class StatistikalarView(View):
@@ -64,5 +64,41 @@ class StatistikalarView(View):
             mahsulot.save()
             mijoz.qarz = sum(Sotuv.objects.filter(tarqatuvchi=request.user, mijoz=mijoz).values_list('qarz', flat=True))
             mijoz.save()
+            return redirect('statistikalar')
+        return redirect('login')
+
+
+class StatikDeletView(View):
+    def get(self, request, pk):
+        if request.user.is_authenticated:
+            sotuv = Sotuv.objects.get(id=pk)
+            if sotuv.tarqatuvchi == request.user:
+                sotuv.delete()
+            return redirect('statistikalar')
+        return redirect('login')
+
+
+class StatikTahrirlashView(View):
+    def get(self, request, pk):
+        sotuv = get_object_or_404(Sotuv, pk=pk)
+        mahsulotlar = Mahsulot.objects.all()
+        mijoz = Mijoz.objects.all()
+        context = {
+            'product': sotuv,
+            'mahsulotlar':mahsulotlar,
+            'mijozlar': mijoz
+        }
+        return render(request, 'statistika-tahrirlash.html', context)
+
+    def post(self, request, pk):
+        if request.user.is_authenticated:
+            sotuv = get_object_or_404(Sotuv, pk=pk)
+            sotuv.mahsulot = request.POST.get('mahsulot')
+            sotuv.mijoz = request.POST.get('mijoz')
+            sotuv.miqdor = request.POST.get('miqdor')
+            sotuv.summa = request.POST.get('summa')
+            sotuv.tolandi = request.POST.get('tolandi', 0)
+            sotuv.qarz = request.POST.get('qarz', 0)
+            sotuv.save()
             return redirect('statistikalar')
         return redirect('login')

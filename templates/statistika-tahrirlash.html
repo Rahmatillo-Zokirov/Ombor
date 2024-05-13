@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% load static %}
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Statistika Tahrirlash</title>
+
+  <!-- Google Font: Source Sans Pro -->
+  <link rel="stylesheet" href="/satatic/https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
+  <!-- Font Awesome Icons -->
+  <link rel="stylesheet" href="/static/plugins/fontawesome-free/css/all.min.css">
+  <!-- IonIcons -->
+  <link rel="stylesheet" href="/static/https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
+  <!-- Theme style -->
+  <link rel="stylesheet" href="/static/dist/css/adminlte.min.css">
+  <link rel="stylesheet" href="/static/https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <script src="/sattic/https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="/sattic/https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+  <script src="/static/https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</head>
+
+
+<body class="hold-transition sidebar-mini">
+<div class="wrapper">
+
+  <!-- Content Wrapper. Contains page content -->
+  <div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <div class="content-header">
+      <div class="container-fluid">
+        <div class="row mb-2">
+          <div class="col-sm-6">
+            <h1 class="m-0">Statistika Tahrirlash</h1>
+          </div><!-- /.col -->
+          
+        </div><!-- /.row -->
+      </div><!-- /.container-fluid -->
+    </div>
+    <!-- /.content-header -->
+
+
+          <!-- Modal Header -->
+
+          <!-- Modal body -->
+     <form action="/main/statistikalar/{{ sotuv.id }}/tahrirlash/" method="POST" id="edit-product-form">
+        {% csrf_token %}
+            <div class="modal-body">
+                <label for="new-product-name">Mahsulot:</label>
+                <select name="mahsulot" class="form-control" required>
+                {% for mahsulot in mahsulotlar %}
+                    <option value="{{ mahsulot.id }}">{{ mahsulot.nom }} - {{ mahsulot.brand }}</option>
+                {% endfor %}
+                </select>
+                <label for="new-product-name">Mijoz:</label>
+                <select name="mijoz" class="form-control" required>
+                    {% for mijoz in mijozlar %}
+                        <option value="{{ mijoz.id }}">{{ mijoz.ism }} - {{ mijoz.dokon }}</option>
+                    {% endfor %}
+                </select>
+                            <br>
+                <label for="new-product-name">Miqdor:</label>
+                <input type="number" name="miqdor" value="{{ sotuv.miqdor }}" class="form-control" required>
+                <br>
+                <label for="new-product-name">Summa:</label>
+                <input type="number" name="summa" value="{{ sotuv.summa }}" class="form-control" required>
+                <br>
+                <label for="new-product-name">Tolandi:</label>
+                <input type="number" name="tolandi" value="{{ sotuv.tolandi }}" class="form-control">
+                <br>
+                <label for="new-product-name">Qarz:</label>
+                <input type="number" name="qarz" value="{{ sotuv.qarz }}" class="form-control">
+            </div>
+        
+            <!-- Modal footer -->
+            <button type="submit" class="btn btn-success">Yangilash</button>
+            <a href="{% url 'statistikalar' %}"><button type="button" class="btn btn-danger" data-dismiss="modal">Yopish</button></a>
+        </form>
+
+
+
+<!-- ./wrapper -->
+
+<!-- REQUIRED SCRIPTS -->
+
+<!-- jQuery -->
+<script src="/static/plugins/jquery/jquery.min.js"></script>
+<!-- Bootstrap -->
+<script src="/static/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+<!-- AdminLTE -->
+<script src="/static/dist/js/adminlte.js"></script>
+
+<!-- OPTIONAL SCRIPTS -->
+<script src="/static/plugins/chart.js/Chart.min.js"></script>
+<!-- AdminLTE for demo purposes -->
+<script src="/static/dist/js/demo.js"></script>
+<!-- AdminLTE dashboard demo (This is only for demo purposes) -->
+<script src="/static/dist/js/pages/dashboard3.js"></script>
+</body>
+</html>

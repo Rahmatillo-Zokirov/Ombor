@@ -78,27 +78,41 @@ class StatikDeletView(View):
         return redirect('login')
 
 
-class StatikTahrirlashView(View):
+class StatikUpdateView(View):
     def get(self, request, pk):
-        sotuv = get_object_or_404(Sotuv, pk=pk)
-        mahsulotlar = Mahsulot.objects.all()
-        mijoz = Mijoz.objects.all()
-        context = {
-            'product': sotuv,
-            'mahsulotlar':mahsulotlar,
-            'mijozlar': mijoz
-        }
-        return render(request, 'statistika-tahrirlash.html', context)
+        if request.user.is_authenticated:
+            sotuv = Sotuv.objects.get(tarqatuvchi=request.user, id=pk)
+            mahsulot = Mahsulot.objects.get(pk=sotuv.mahsulot.id, tarqatuvchi=request.user)
+            mijoz = Mijoz.objects.get(id=sotuv.mijoz.pk, tarqatuvchi=request.user)
+            context = {
+                'sotuv': sotuv,
+                'mahsulot': mahsulot,
+                'mijoz': mijoz,
+            }
+            return render(request, 'statistika-tahrirlash.html', context)
+        return redirect('login')
 
     def post(self, request, pk):
         if request.user.is_authenticated:
-            sotuv = get_object_or_404(Sotuv, pk=pk)
-            sotuv.mahsulot = request.POST.get('mahsulot')
-            sotuv.mijoz = request.POST.get('mijoz')
-            sotuv.miqdor = request.POST.get('miqdor')
-            sotuv.summa = request.POST.get('summa')
-            sotuv.tolandi = request.POST.get('tolandi', 0)
-            sotuv.qarz = request.POST.get('qarz', 0)
-            sotuv.save()
-            return redirect('statistikalar')
-        return redirect('login')
+            sotuv = Sotuv.objects.get(tarqatuvchi=request.user, id=pk)
+            miqdor = float(request.POST.get('miqdor'))
+            mahsulot = sotuv.first().mahsulot
+
+            if mahsulot.miqdor >= (miqdor[0] - float(sotuv.first().miqdor())):
+                mahsulot.miqdor + float(sotuv.first().miqdor) - miqdor[0]
+                mahsulot.save()
+
+            qarz = request.POST.get('qarz')
+            tolandi = request.POST.get('tolandi')
+            summa = request.POST.get('summa')
+            if sotuv.first().miqdor != miqdor[0]:
+                summa = float(sotuv.first().mahsulot.nax2) * miqdor[0]
+            qarz = float(summa) - float(tolandi)
+            sotuv.update(
+                tarqatuvchi=request.user,
+                mahsulot=mahsulot,
+                miqdor=miqdor,
+                summa=summa,
+                qarz=qarz
+
+            )

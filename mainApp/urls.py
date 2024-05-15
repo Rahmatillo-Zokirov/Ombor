@@ -13,6 +13,6 @@ urlpatterns = [
     path('mijozlar/<int:pk>/tahrirlash/', MijozTahrirlashView.as_view(), name='mijozlar_tahrirlash'),
     path('statistikalar/', StatistikalarView.as_view(), name='statistikalar'),
     path('mijozlar/<int:pk>/ochirish/', MijozDeletView.as_view(), name='mijozlar_ochirish'),
-    path('statistikalar/<int:pk>/tahrirlash', StatikTahrirlashView.as_view(), name='statistika_tahrirlash'),
+    # path('statistikalar/<int:pk>/tahrirlash', StatikTahrirlashView.as_view(), name='statistika_tahrirlash'),
     path('statistikalar/<int:pk>/delet', StatikDeletView.as_view(), name='statik_delete'),
 ]

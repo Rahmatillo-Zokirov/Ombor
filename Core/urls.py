@@ -8,7 +8,7 @@ from mainApp.views import *
 from userApp.views import *
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
+    path('admin/', admin.site.urls, name='admin'),
     path('main/', include('mainApp.urls')),
     path('user/', include('userApp.urls')),
     path('', LoginView.as_view(), name='login'),
